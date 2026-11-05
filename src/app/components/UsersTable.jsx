@@ -4,12 +4,12 @@ import React from 'react';
 import { Button, Table } from "@heroui/react";
 import Link from 'next/link';
 import { AlertDialog } from "@heroui/react";
-import { deleteUser } from '../lib/actions';
-const UsersTable = ({ users }) => {
+
+const UsersTable = ({ users, deleteUserAction }) => {
 
     const handleDelete = async (userId) => {
 
-        await deleteUser(userId);
+      await deleteUserAction(userId);
 
     };
 
