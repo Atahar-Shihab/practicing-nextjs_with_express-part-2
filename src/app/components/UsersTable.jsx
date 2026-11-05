@@ -1,9 +1,19 @@
+'use client';
+
 import React from 'react';
 import { Button, Table } from "@heroui/react";
 import Link from 'next/link';
+import { AlertDialog } from "@heroui/react";
+import { deleteUser } from '../lib/actions';
 const UsersTable = ({ users }) => {
-    return (
 
+    const handleDelete = async (userId) => {
+
+        await deleteUser(userId);
+
+    };
+
+    return (
         <Table>
             <Table.ScrollContainer>
                 <Table.Content aria-label="Team members" className="min-w-[600px]">
@@ -23,16 +33,42 @@ const UsersTable = ({ users }) => {
                                     <Table.Cell>{user.status ? 'Active' : 'Inactive'}</Table.Cell>
                                     <Table.Cell>{user.email}</Table.Cell>
                                     <Table.Cell className="flex gap-2">
-                                        <Link href={`/users/${user.id}`}>
+                                        <Link href={`/users/${user._id}`}>
                                             <Button variant="primary">View</Button>
                                         </Link>
-                                        <Link href={`/users/${user.id}/edit`}>
+                                        <Link href={`/users/${user._id}/edit`}>
                                             <Button variant="outline">Edit</Button>
                                         </Link>
-                                        <Link href={`/users/${user.id}/delete`}>
-                                            <Button  variant="danger-soft"
-                                            className="hover:bg-red-600 hover:text-white" >Delete</Button>
-                                        </Link>
+                                        {/* <Link href={`/users/${user._id}/delete`}> */}
+                                           <AlertDialog>
+      <Button variant="danger">Delete</Button>
+      <AlertDialog.Backdrop>
+        <AlertDialog.Container>
+          <AlertDialog.Dialog className="sm:max-w-[400px]">
+            <AlertDialog.CloseTrigger />
+            <AlertDialog.Header>
+              <AlertDialog.Icon status="danger" />
+              <AlertDialog.Heading>Delete user permanently?</AlertDialog.Heading>
+            </AlertDialog.Header>
+            <AlertDialog.Body>
+              <p>
+                This will permanently delete <strong>{user.name}</strong> and all of its
+                data. This action cannot be undone.
+              </p>
+            </AlertDialog.Body>
+            <AlertDialog.Footer>
+              <Button slot="close" variant="tertiary">
+                Cancel
+              </Button>
+              <Button onClick={() => handleDelete(user._id)} slot="close" variant="danger">
+                Confirm Delete
+              </Button>
+            </AlertDialog.Footer>
+          </AlertDialog.Dialog>
+        </AlertDialog.Container>
+      </AlertDialog.Backdrop>
+    </AlertDialog>
+                                        {/* </Link> */}
                                     </Table.Cell>
                                 </Table.Row>
                             ))
